@@ -8,12 +8,12 @@ pipeline {
         }
         stage('docker image build') {
             steps {
-                sh 'docker build -t 2131_wedding_lite /var/lib/jenkins/workspace/2131_wedding_lite/Dockerfile'
+                sh 'docker build -t 2131_wedding_lite /var/lib/jenkins/workspace/2131_wedding_lite/'
             }
         }
         stage('docker run') {
             steps {
-                sh 'docker run -d -name static -p 8088:8087 2131_wedding_lite'
+                sh 'docker run -d --name static -p 8088:8087 2131_wedding_lite'
             }
         }
     }

@@ -1,9 +1,6 @@
 pipeline {
     agent any
-    tools {
-        maven "maven"
-        jdk "openjdk-11"
-    }
+
     environment {
         SNAP_REPO = '2131_wedding_lite_01-snapshot'
         NEXUS_USER = 'admin'
@@ -28,30 +25,6 @@ pipeline {
             }
         }
         
-        stage('Build') {
-            steps {
-                sh 'mvn -s settings.xml -DskipTests install'
-            }
-            post {
-                success {
-                    echo "Now Archiving"
-                    archiveArtifacts artifacts: '**/*.war'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn -s settings.xml test'
-            }
-        }
-
-        stage('Checkstyle Analysis') {
-            steps {
-                sh 'mvn -s settings.xml checkstyle:checkstyle'
-            }
-        }
-
         stage('Upload Artifact To Nexus') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'nexus3', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {

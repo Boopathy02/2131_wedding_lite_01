@@ -6,9 +6,10 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/Boopathy02/2131_wedding_lite.git'
             }
         }
-        stage('Docker Image Build') {
+        stage('ssh agent clone') {
             steps {
-                sshagent(['ubuntu']) {
+                script {
+                    sshagent(['ubuntu']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@18.191.107.182 <<EOF
                         #!/bin/bash
@@ -33,6 +34,7 @@ pipeline {
                         echo "Repository cloned into $DIR."
                         EOF
                     '''
+                }
                 }
             }
         }

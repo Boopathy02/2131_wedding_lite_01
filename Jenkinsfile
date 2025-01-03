@@ -1,17 +1,18 @@
 pipeline {
     agent any
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-                git branch:'master', url:'https://github.com/Boopathy02/2131_wedding_lite.git' 
+                git branch: 'master', url: 'https://github.com/Boopathy02/2131_wedding_lite.git'
             }
         }
-        stage('docker image build') {
+        stage('Docker Image Build') {
             steps {
-               sshagent(['ubuntu']){
+                sshagent(['ubuntu']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@18.191.107.182 "
+                        ssh -o StrictHostKeyChecking=no ubuntu@18.191.107.182 <<EOF
                         #!/bin/bash
+                        set -e
 
                         # Define the directory and repository
                         DIR="2131_wedding_lite"
@@ -30,8 +31,7 @@ pipeline {
                         echo "Cloning repository $REPO..."
                         git clone "$REPO" "$DIR"
                         echo "Repository cloned into $DIR."
-
-                        
+                        EOF
                     '''
                 }
             }

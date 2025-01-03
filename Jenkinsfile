@@ -11,7 +11,7 @@ pipeline {
                 script {
                     sshagent(['ubuntu']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@18.191.107.182 <<EOF
+                        ssh -o StrictHostKeyChecking=no -t ubuntu@18.191.107.182 <<EOF
                         #!/bin/bash
                         set -e
 

@@ -8,12 +8,32 @@ pipeline {
         }
         stage('docker image build') {
             steps {
-                sh 'docker build -t 2131_wedding_lite /var/lib/jenkins/workspace/2131_wedding_lite/'
-            }
-        }
-        stage('docker run') {
-            steps {
-                sh 'docker run -d --name static -p 8088:8087 2131_wedding_lite'
+               sshagent(['ubuntu']){
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@18.191.107.182 "
+                        #!/bin/bash
+
+                        # Define the directory and repository
+                        DIR="2131_wedding_lite"
+                        REPO="https://github.com/Boopathy02/2131_wedding_lite.git"
+
+                        # Check if the directory exists
+                        if [ -d "$DIR" ]; then
+                            echo "Directory $DIR exists. Removing it..."
+                            rm -rf "$DIR"
+                            echo "Directory removed."
+                        else
+                            echo "Directory $DIR does not exist."
+                        fi
+
+                        # Clone the repository
+                        echo "Cloning repository $REPO..."
+                        git clone "$REPO" "$DIR"
+                        echo "Repository cloned into $DIR."
+
+                        
+                    '''
+                }
             }
         }
     }
